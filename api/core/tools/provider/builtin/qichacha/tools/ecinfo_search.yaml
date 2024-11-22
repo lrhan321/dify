@@ -1,0 +1,27 @@
+identity:
+  name: ecinfo_search
+  author: Lirhi
+  label:
+    en_US: Qichacha Enterprise Commercial Info Search
+    zh_Hans: 企查查企业工商信息查询
+    pt_BR: Qichacha Enterprise Commercial Info Search
+description:
+  human:
+    en_US: Comprehensive business details, including basic company information, registered shareholders (including shareholding ratios), key personnel, branch offices, change records, industry classification, and company profile.
+    zh_Hans: 全方位的企业工商详情，包含企业基本照面信息、工商登记股东信息（含股比）、工商登记主要人员、分支机构、变更信息、行业分类、企业画像等信息。
+    pt_BR: Comprehensive business details, including basic company information, registered shareholders (including shareholding ratios), key personnel, branch offices, change records, industry classification, and company profile.
+  llm: A tool that allows querying corporate information, including company profiles, legal representatives, business status, equity relationships, and financial reports.
+parameters:
+  - name: search_key
+    type: string
+    required: true
+    label:
+      en_US: Search keyword
+      zh_Hans: 查询关键字
+      pt_BR: Search keyword
+    human_description:
+      en_US: Keywords of the enterprise to be queried, e.g., support enterprise name, unified social credit code, registration number, QccCode, etc.
+      zh_Hans: 需要查询的企业的关键字，例如：支持企业名称、统一社会信用代码、注册号、QccCode等
+      pt_BR: Keywords of the enterprise to be queried, e.g., support enterprise name, unified social credit code, registration number, etc, QccCode.
+    llm_description: key words for searching
+    form: llm

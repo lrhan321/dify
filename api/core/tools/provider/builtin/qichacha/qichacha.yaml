@@ -1,0 +1,48 @@
+identity:
+  author: Lirhi
+  name: qichacha
+  label:
+    en_US: Qichacha
+    zh_Hans: 企查查
+    pt_BR: Qichacha
+  description:
+    en_US: Provide comprehensive query services across multiple areas such as business registration information, litigation records, and operational risks, supporting enterprises in risk management, due diligence, credit evaluation, and more.
+    zh_Hans: 提供企业工商信息、法律诉讼、经营风险等多方面的查询服务，为企业的风险管理、尽职调查、信用评估等提供支持。
+    pt_BR: Provide comprehensive query services across multiple areas such as business registration information, litigation records, and operational risks, supporting enterprises in risk management, due diligence, credit evaluation, and more.
+  icon: icon.png
+  tags:
+    - search
+    - enterprise
+credentials_for_provider:
+  key:
+    type: secret-input
+    required: true
+    label:
+      en_US: Qichacha API Key
+      zh_Hans: 企查查API Key
+      pt_BR: Qichacha API Key
+    placeholder:
+      en_US: Please input your Qichacha API Key
+      zh_Hans: 请输入你的企查查API Key
+      pt_BR: Please input your Qichacha API Key
+    help:
+      en_US: Get your Qichacha API Key from Qichacha.
+      zh_Hans: 从企查查获取您的企查查API Key。
+      pt_BR: Get your Qichacha API Key from Qichacha.
+    url: https://openapi.qcc.com/manage/data/interface
+  secret_key:
+    type: secret-input
+    required: true
+    label:
+      en_US: Qichacha Secret Key
+      zh_Hans: 企查查Secrete Key
+      pt_BR: Qichacha Secret Key
+    placeholder:
+      en_US: Please input your Qichacha Secret Key
+      zh_Hans: 请输入你的企查查 Secret Key
+      pt_BR: Please input your Qichacha Secret Key
+    help:
+      en_US: Get your Qichacha Secret Key from Qichacha.
+      zh_Hans: 从企查查获取您的企查查 Secret Key。
+      pt_BR: Get your Qichacha Secret Key from Qichacha.
+    url: https://openapi.qcc.com/manage/data/interface
