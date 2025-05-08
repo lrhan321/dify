@@ -7,6 +7,7 @@ from typing import Any, Literal, Optional, Union, overload
 
 from flask import Flask, current_app
 from pydantic import ValidationError
+from sqlalchemy.orm import sessionmaker
 
 import contexts
 from configs import dify_config
@@ -17,11 +18,13 @@ from core.app.apps.workflow.app_config_manager import WorkflowAppConfigManager
 from core.app.apps.workflow.app_queue_manager import WorkflowAppQueueManager
 from core.app.apps.workflow.app_runner import WorkflowAppRunner
 from core.app.apps.workflow.generate_response_converter import WorkflowAppGenerateResponseConverter
-from core.app.apps.workflow.generate_task_pipeline import WorkflowAppGenerateTaskPipeline
 from core.app.entities.app_invoke_entities import InvokeFrom, WorkflowAppGenerateEntity
 from core.app.entities.task_entities import WorkflowAppBlockingResponse, WorkflowAppStreamResponse
 from core.model_runtime.errors.invoke import InvokeAuthorizationError
 from core.ops.ops_trace_manager import TraceQueueManager
+from core.repositories import SQLAlchemyWorkflowNodeExecutionRepository
+from core.workflow.repository.workflow_node_execution_repository import WorkflowNodeExecutionRepository
+from core.workflow.workflow_app_generate_task_pipeline import WorkflowAppGenerateTaskPipeline
 from extensions.ext_database import db
 from factories import file_factory
 from models import Account, App, EndUser, Workflow
@@ -92,6 +95,7 @@ class WorkflowAppGenerator(BaseAppGenerator):
             mappings=files,
             tenant_id=app_model.tenant_id,
             config=file_extra_config,
+            strict_type_validation=True if invoke_from == InvokeFrom.SERVICE_API else False,
         )
 
         # convert to app config
@@ -114,7 +118,10 @@ class WorkflowAppGenerator(BaseAppGenerator):
             app_config=app_config,
             file_upload_config=file_extra_config,
             inputs=self._prepare_user_inputs(
-                user_inputs=inputs, variables=app_config.variables, tenant_id=app_model.tenant_id
+                user_inputs=inputs,
+                variables=app_config.variables,
+                tenant_id=app_model.tenant_id,
+                strict_type_validation=True if invoke_from == InvokeFrom.SERVICE_API else False,
             ),
             files=list(system_files),
             user_id=user.id,
@@ -129,12 +136,21 @@ class WorkflowAppGenerator(BaseAppGenerator):
         contexts.plugin_tool_providers.set({})
         contexts.plugin_tool_providers_lock.set(threading.Lock())
 
+        # Create workflow node execution repository
+        session_factory = sessionmaker(bind=db.engine, expire_on_commit=False)
+        workflow_node_execution_repository = SQLAlchemyWorkflowNodeExecutionRepository(
+            session_factory=session_factory,
+            tenant_id=application_generate_entity.app_config.tenant_id,
+            app_id=application_generate_entity.app_config.app_id,
+        )
+
         return self._generate(
             app_model=app_model,
             workflow=workflow,
             user=user,
             application_generate_entity=application_generate_entity,
             invoke_from=invoke_from,
+            workflow_node_execution_repository=workflow_node_execution_repository,
             streaming=streaming,
             workflow_thread_pool_id=workflow_thread_pool_id,
         )
@@ -147,6 +163,7 @@ class WorkflowAppGenerator(BaseAppGenerator):
         user: Union[Account, EndUser],
         application_generate_entity: WorkflowAppGenerateEntity,
         invoke_from: InvokeFrom,
+        workflow_node_execution_repository: WorkflowNodeExecutionRepository,
         streaming: bool = True,
         workflow_thread_pool_id: Optional[str] = None,
     ) -> Union[Mapping[str, Any], Generator[str | Mapping[str, Any], None, None]]:
@@ -158,7 +175,8 @@ class WorkflowAppGenerator(BaseAppGenerator):
         :param user: account or end user
         :param application_generate_entity: application generate entity
         :param invoke_from: invoke from source
-        :param stream: is stream
+        :param workflow_node_execution_repository: repository for workflow node execution
+        :param streaming: is stream
         :param workflow_thread_pool_id: workflow thread pool id
         """
         # init queue manager
@@ -189,6 +207,7 @@ class WorkflowAppGenerator(BaseAppGenerator):
             workflow=workflow,
             queue_manager=queue_manager,
             user=user,
+            workflow_node_execution_repository=workflow_node_execution_repository,
             stream=streaming,
         )
 
@@ -208,10 +227,10 @@ class WorkflowAppGenerator(BaseAppGenerator):
 
         :param app_model: App
         :param workflow: Workflow
+        :param node_id: the node id
         :param user: account or end user
         :param args: request args
-        :param invoke_from: invoke from source
-        :param stream: is stream
+        :param streaming: is streamed
         """
         if not node_id:
             raise ValueError("node_id is required")
@@ -241,12 +260,21 @@ class WorkflowAppGenerator(BaseAppGenerator):
         contexts.plugin_tool_providers.set({})
         contexts.plugin_tool_providers_lock.set(threading.Lock())
 
+        # Create workflow node execution repository
+        session_factory = sessionmaker(bind=db.engine, expire_on_commit=False)
+        workflow_node_execution_repository = SQLAlchemyWorkflowNodeExecutionRepository(
+            session_factory=session_factory,
+            tenant_id=application_generate_entity.app_config.tenant_id,
+            app_id=application_generate_entity.app_config.app_id,
+        )
+
         return self._generate(
             app_model=app_model,
             workflow=workflow,
             user=user,
             invoke_from=InvokeFrom.DEBUGGER,
             application_generate_entity=application_generate_entity,
+            workflow_node_execution_repository=workflow_node_execution_repository,
             streaming=streaming,
         )
 
@@ -264,10 +292,10 @@ class WorkflowAppGenerator(BaseAppGenerator):
 
         :param app_model: App
         :param workflow: Workflow
+        :param node_id: the node id
         :param user: account or end user
         :param args: request args
-        :param invoke_from: invoke from source
-        :param stream: is stream
+        :param streaming: is streamed
         """
         if not node_id:
             raise ValueError("node_id is required")
@@ -295,12 +323,21 @@ class WorkflowAppGenerator(BaseAppGenerator):
         contexts.plugin_tool_providers.set({})
         contexts.plugin_tool_providers_lock.set(threading.Lock())
 
+        # Create workflow node execution repository
+        session_factory = sessionmaker(bind=db.engine, expire_on_commit=False)
+        workflow_node_execution_repository = SQLAlchemyWorkflowNodeExecutionRepository(
+            session_factory=session_factory,
+            tenant_id=application_generate_entity.app_config.tenant_id,
+            app_id=application_generate_entity.app_config.app_id,
+        )
+
         return self._generate(
             app_model=app_model,
             workflow=workflow,
             user=user,
             invoke_from=InvokeFrom.DEBUGGER,
             application_generate_entity=application_generate_entity,
+            workflow_node_execution_repository=workflow_node_execution_repository,
             streaming=streaming,
         )
 
@@ -357,6 +394,7 @@ class WorkflowAppGenerator(BaseAppGenerator):
         workflow: Workflow,
         queue_manager: AppQueueManager,
         user: Union[Account, EndUser],
+        workflow_node_execution_repository: WorkflowNodeExecutionRepository,
         stream: bool = False,
     ) -> Union[WorkflowAppBlockingResponse, Generator[WorkflowAppStreamResponse, None, None]]:
         """
@@ -366,6 +404,7 @@ class WorkflowAppGenerator(BaseAppGenerator):
         :param queue_manager: queue manager
         :param user: account or end user
         :param stream: is stream
+        :param workflow_node_execution_repository: optional repository for workflow node execution
         :return:
         """
         # init generate task pipeline
@@ -375,6 +414,7 @@ class WorkflowAppGenerator(BaseAppGenerator):
             queue_manager=queue_manager,
             user=user,
             stream=stream,
+            workflow_node_execution_repository=workflow_node_execution_repository,
         )
 
         try:

@@ -3,7 +3,7 @@ import {
   useCallback,
   useState,
 } from 'react'
-import Textarea from 'rc-textarea'
+import Textarea from 'react-textarea-autosize'
 import { useTranslation } from 'react-i18next'
 
 type TitleInputProps = {
@@ -33,7 +33,7 @@ export const TitleInput = memo(({
       value={localValue}
       onChange={e => setLocalValue(e.target.value)}
       className={`
-        system-xl-semibold mr-2 h-7 min-w-0 grow appearance-none rounded-md border border-transparent px-1 text-text-primary
+        system-xl-semibold mr-2 h-7 min-w-0 grow appearance-none rounded-md border border-transparent bg-transparent px-1 text-text-primary
         outline-none focus:shadow-xs
       `}
       placeholder={t('workflow.common.addTitle') || ''}
@@ -71,16 +71,15 @@ export const DescriptionInput = memo(({
       <Textarea
         value={value}
         onChange={e => onChange(e.target.value)}
-        rows={1}
+        minRows={1}
         onFocus={handleFocus}
         onBlur={handleBlur}
         className={`
           w-full resize-none appearance-none bg-transparent text-xs
-          leading-[18px] text-gray-900 caret-[#295EFF]
-          outline-none placeholder:text-gray-400
+          leading-[18px] text-text-primary caret-[#295EFF]
+          outline-none placeholder:text-text-quaternary
         `}
         placeholder={t('workflow.common.addDescription') || ''}
-        autoSize
       />
     </div>
   )

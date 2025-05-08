@@ -1,7 +1,6 @@
-from datetime import datetime
-
-from flask_restful import Resource, marshal_with, reqparse  # type: ignore
-from flask_restful.inputs import int_range  # type: ignore
+from dateutil.parser import isoparse
+from flask_restful import Resource, marshal_with, reqparse
+from flask_restful.inputs import int_range
 from sqlalchemy.orm import Session
 
 from controllers.console import api
@@ -41,10 +40,10 @@ class WorkflowAppLogApi(Resource):
 
         args.status = WorkflowRunStatus(args.status) if args.status else None
         if args.created_at__before:
-            args.created_at__before = datetime.fromisoformat(args.created_at__before.replace("Z", "+00:00"))
+            args.created_at__before = isoparse(args.created_at__before)
 
         if args.created_at__after:
-            args.created_at__after = datetime.fromisoformat(args.created_at__after.replace("Z", "+00:00"))
+            args.created_at__after = isoparse(args.created_at__after)
 
         # get paginate workflow app logs
         workflow_app_service = WorkflowAppService()

@@ -25,6 +25,7 @@ import cn from '@/utils/classnames'
 const Chatbot = () => {
   const {
     isMobile,
+    allowResetChat,
     appInfoError,
     appInfoLoading,
     appData,
@@ -90,6 +91,7 @@ const Chatbot = () => {
       >
         <Header
           isMobile={isMobile}
+          allowResetChat={allowResetChat}
           title={site?.title || ''}
           customerIcon={isDify() ? difyIcon : ''}
           theme={themeBuilder?.theme}
@@ -153,6 +155,7 @@ const EmbeddedChatbotWrapper = () => {
     handleNewConversationCompleted,
     chatShouldReloadKey,
     isInstalledApp,
+    allowResetChat,
     appId,
     handleFeedback,
     currentChatInstanceRef,
@@ -160,6 +163,8 @@ const EmbeddedChatbotWrapper = () => {
     setClearChatList,
     isResponding,
     setIsResponding,
+    currentConversationInputs,
+    setCurrentConversationInputs,
   } = useEmbeddedChatbot()
 
   return <EmbeddedChatbotContext.Provider value={{
@@ -185,6 +190,7 @@ const EmbeddedChatbotWrapper = () => {
     chatShouldReloadKey,
     isMobile,
     isInstalledApp,
+    allowResetChat,
     appId,
     handleFeedback,
     currentChatInstanceRef,
@@ -193,6 +199,8 @@ const EmbeddedChatbotWrapper = () => {
     setClearChatList,
     isResponding,
     setIsResponding,
+    currentConversationInputs,
+    setCurrentConversationInputs,
   }}>
     <Chatbot />
   </EmbeddedChatbotContext.Provider>

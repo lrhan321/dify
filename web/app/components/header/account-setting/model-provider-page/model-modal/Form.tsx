@@ -167,7 +167,9 @@ function Form<
             validated={validatedSuccess}
             placeholder={placeholder?.[language] || placeholder?.en_US}
             disabled={disabled}
-            type={formSchema.type === FormTypeEnum.textNumber ? 'number' : 'text'}
+            type={formSchema.type === FormTypeEnum.secretInput ? 'password'
+              : formSchema.type === FormTypeEnum.textNumber ? 'number'
+                : 'text'}
             {...(formSchema.type === FormTypeEnum.textNumber ? { min: (formSchema as CredentialFormSchemaNumberInput).min, max: (formSchema as CredentialFormSchemaNumberInput).max } : {})} />
           {fieldMoreInfo?.(formSchema)}
           {validating && changeKey === variable && <ValidatingTip />}
@@ -374,6 +376,7 @@ function Form<
             tooltip={tooltip?.[language] || tooltip?.en_US}
             value={value[variable] || []}
             onChange={item => handleFormChange(variable, item as any)}
+            supportCollapse
           />
           {fieldMoreInfo?.(formSchema)}
           {validating && changeKey === variable && <ValidatingTip />}

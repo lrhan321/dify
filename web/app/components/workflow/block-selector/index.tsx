@@ -116,7 +116,7 @@ const NodeSelector: FC<NodeSelectorProps> = ({
             : (
               <div
                 className={`
-                  z-10 flex h-4 
+                  z-10 flex h-4
                   w-4 cursor-pointer items-center justify-center rounded-full bg-components-button-primary-bg text-text-primary-on-surface hover:bg-components-button-primary-bg-hover
                   ${triggerClassName?.(open)}
                 `}
@@ -128,7 +128,7 @@ const NodeSelector: FC<NodeSelectorProps> = ({
         }
       </PortalToFollowElemTrigger>
       <PortalToFollowElemContent className='z-[1000]'>
-        <div className={`rounded-lg border-[0.5px] border-gray-200 bg-white shadow-lg ${popupClassName}`}>
+        <div className={`rounded-lg border-[0.5px] border-components-panel-border bg-components-panel-bg shadow-lg ${popupClassName}`}>
           <div className='px-2 pt-2' onClick={e => e.stopPropagation()}>
             {activeTab === TabsEnum.Blocks && (
               <Input

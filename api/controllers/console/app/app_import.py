@@ -1,13 +1,14 @@
 from typing import cast
 
-from flask_login import current_user  # type: ignore
-from flask_restful import Resource, marshal_with, reqparse  # type: ignore
+from flask_login import current_user
+from flask_restful import Resource, marshal_with, reqparse
 from sqlalchemy.orm import Session
 from werkzeug.exceptions import Forbidden
 
 from controllers.console.app.wraps import get_app_model
 from controllers.console.wraps import (
     account_initialization_required,
+    cloud_edition_billing_resource_check,
     setup_required,
 )
 from extensions.ext_database import db
@@ -23,6 +24,7 @@ class AppImportApi(Resource):
     @login_required
     @account_initialization_required
     @marshal_with(app_import_fields)
+    @cloud_edition_billing_resource_check("apps")
     def post(self):
         # Check user role first
         if not current_user.is_editor:

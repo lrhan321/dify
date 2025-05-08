@@ -238,7 +238,7 @@ const SimpleSelect: FC<ISelectProps> = ({
         )}
 
         {!disabled && (
-          <ListboxOptions className={classNames('absolute z-10 mt-1 px-1 max-h-60 w-full overflow-auto rounded-md bg-components-panel-bg-blur backdrop-blur-sm py-1 text-base shadow-lg border-components-panel-border border-[0.5px] focus:outline-none sm:text-sm', optionWrapClassName)}>
+          <ListboxOptions className={classNames('absolute z-10 mt-1 px-1 max-h-60 w-full overflow-auto rounded-xl bg-components-panel-bg-blur backdrop-blur-sm py-1 text-base shadow-lg border-components-panel-border border-[0.5px] focus:outline-none sm:text-sm', optionWrapClassName)}>
             {items.map((item: Item) => (
               <ListboxOption
                 key={item.value}
@@ -324,7 +324,7 @@ const PortalSelect: FC<PortalSelectProps> = ({
           : (
             <div
               className={classNames(`
-            group flex items-center justify-between px-2.5 h-9 rounded-lg border-0 bg-components-input-bg-normal hover:bg-state-base-hover-alt text-sm ${readonly ? 'cursor-not-allowed' : 'cursor-pointer'} 
+            group flex items-center justify-between px-2.5 h-9 rounded-lg border-0 bg-components-input-bg-normal hover:bg-state-base-hover-alt text-sm ${readonly ? 'cursor-not-allowed' : 'cursor-pointer'}
           `, triggerClassName, triggerClassNameFn?.(open))}
               title={selectedItem?.name}
             >

@@ -3,18 +3,16 @@ import re
 import uuid
 from collections.abc import Mapping
 from datetime import datetime
-from enum import Enum
-from typing import TYPE_CHECKING, Optional
+from enum import Enum, StrEnum
+from typing import TYPE_CHECKING, Any, Literal, Optional, cast
 
 from core.plugin.entities.plugin import GenericProviderID
 from core.tools.entities.tool_entities import ToolProviderType
+from core.tools.signature import sign_tool_file
 from services.plugin.plugin_service import PluginService
 
 if TYPE_CHECKING:
     from models.workflow import Workflow
-
-from enum import StrEnum
-from typing import TYPE_CHECKING, Any, Literal, cast
 
 import sqlalchemy as sa
 from flask import request
@@ -23,9 +21,9 @@ from sqlalchemy import Float, Index, PrimaryKeyConstraint, func, text
 from sqlalchemy.orm import Mapped, Session, mapped_column
 
 from configs import dify_config
+from constants import DEFAULT_FILE_NUMBER_LIMITS
 from core.file import FILE_MODEL_IDENTITY, File, FileTransferMethod, FileType
 from core.file import helpers as file_helpers
-from core.file.tool_file_parser import ToolFileParser
 from libs.helper import generate_string
 from models.base import Base
 from models.enums import CreatedByRole
@@ -442,7 +440,7 @@ class AppModelConfig(Base):
             else {
                 "image": {
                     "enabled": False,
-                    "number_limits": 3,
+                    "number_limits": DEFAULT_FILE_NUMBER_LIMITS,
                     "detail": "high",
                     "transfer_methods": ["remote_url", "local_file"],
                 }
@@ -791,7 +789,7 @@ class Conversation(db.Model):  # type: ignore[name-defined]
             WorkflowRunStatus.SUCCEEDED: 0,
             WorkflowRunStatus.FAILED: 0,
             WorkflowRunStatus.STOPPED: 0,
-            WorkflowRunStatus.PARTIAL_SUCCESSED: 0,
+            WorkflowRunStatus.PARTIAL_SUCCEEDED: 0,
         }
 
         for message in messages:
@@ -802,7 +800,7 @@ class Conversation(db.Model):  # type: ignore[name-defined]
             {
                 "success": status_counts[WorkflowRunStatus.SUCCEEDED],
                 "failed": status_counts[WorkflowRunStatus.FAILED],
-                "partial_success": status_counts[WorkflowRunStatus.PARTIAL_SUCCESSED],
+                "partial_success": status_counts[WorkflowRunStatus.PARTIAL_SUCCEEDED],
             }
             if messages
             else None
@@ -988,9 +986,7 @@ class Message(db.Model):  # type: ignore[name-defined]
                 if not tool_file_id:
                     continue
 
-                sign_url = ToolFileParser.get_tool_file_manager().sign_file(
-                    tool_file_id=tool_file_id, extension=extension
-                )
+                sign_url = sign_tool_file(tool_file_id=tool_file_id, extension=extension)
             elif "file-preview" in url:
                 # get upload file id
                 upload_file_id_pattern = r"\/files\/([\w-]+)\/file-preview?\?timestamp="
@@ -1014,7 +1010,9 @@ class Message(db.Model):  # type: ignore[name-defined]
                 sign_url = file_helpers.get_signed_file_url(upload_file_id)
             else:
                 continue
-
+            # if as_attachment is in the url, add it to the sign_url.
+            if "as_attachment" in url:
+                sign_url += "&as_attachment=true"
             re_sign_file_url_answer = re_sign_file_url_answer.replace(url, sign_url)
 
         return re_sign_file_url_answer
@@ -1090,12 +1088,7 @@ class Message(db.Model):  # type: ignore[name-defined]
 
     @property
     def retriever_resources(self):
-        return (
-            db.session.query(DatasetRetrieverResource)
-            .filter(DatasetRetrieverResource.message_id == self.id)
-            .order_by(DatasetRetrieverResource.position.asc())
-            .all()
-        )
+        return self.message_metadata_dict.get("retriever_resources") if self.message_metadata else []
 
     @property
     def message_files(self):
@@ -1154,7 +1147,7 @@ class Message(db.Model):  # type: ignore[name-defined]
             files.append(file)
 
         result = [
-            {"belongs_to": message_file.belongs_to, **file.to_dict()}
+            {"belongs_to": message_file.belongs_to, "upload_file_id": message_file.upload_file_id, **file.to_dict()}
             for (file, message_file) in zip(files, message_files)
         ]
 

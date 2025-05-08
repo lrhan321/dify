@@ -9,7 +9,7 @@ import uuid
 from typing import Any, Optional, cast
 
 from flask import current_app
-from flask_login import current_user  # type: ignore
+from flask_login import current_user
 from sqlalchemy.orm.exc import ObjectDeletedError
 
 from configs import dify_config
@@ -187,7 +187,7 @@ class IndexingRunner:
                             },
                         )
                         if dataset_document.doc_form == IndexType.PARENT_CHILD_INDEX:
-                            child_chunks = document_segment.child_chunks
+                            child_chunks = document_segment.get_child_chunks()
                             if child_chunks:
                                 child_documents = []
                                 for child_chunk in child_chunks:

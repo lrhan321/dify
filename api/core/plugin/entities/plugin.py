@@ -70,6 +70,9 @@ class PluginDeclaration(BaseModel):
         models: Optional[list[str]] = Field(default_factory=list)
         endpoints: Optional[list[str]] = Field(default_factory=list)
 
+    class Meta(BaseModel):
+        minimum_dify_version: Optional[str] = Field(default=None, pattern=r"^\d{1,4}(\.\d{1,4}){1,3}(-\w{1,16})?$")
+
     version: str = Field(..., pattern=r"^\d{1,4}(\.\d{1,4}){1,3}(-\w{1,16})?$")
     author: Optional[str] = Field(..., pattern=r"^[a-zA-Z0-9_-]{1,64}$")
     name: str = Field(..., pattern=r"^[a-z0-9_-]{1,128}$")
@@ -81,11 +84,13 @@ class PluginDeclaration(BaseModel):
     resource: PluginResourceRequirements
     plugins: Plugins
     tags: list[str] = Field(default_factory=list)
+    repo: Optional[str] = Field(default=None)
     verified: bool = Field(default=False)
     tool: Optional[ToolProviderEntity] = None
     model: Optional[ProviderEntity] = None
     endpoint: Optional[EndpointProviderDeclaration] = None
     agent_strategy: Optional[AgentStrategyProviderEntity] = None
+    meta: Meta
 
     @model_validator(mode="before")
     @classmethod
@@ -120,8 +125,6 @@ class PluginEntity(PluginInstallation):
     name: str
     installation_id: str
     version: str
-    latest_version: Optional[str] = None
-    latest_unique_identifier: Optional[str] = None
 
     @model_validator(mode="after")
     def set_plugin_id(self):

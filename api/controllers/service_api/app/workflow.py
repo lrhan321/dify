@@ -1,8 +1,8 @@
 import logging
-from datetime import datetime
 
-from flask_restful import Resource, fields, marshal_with, reqparse  # type: ignore
-from flask_restful.inputs import int_range  # type: ignore
+from dateutil.parser import isoparse
+from flask_restful import Resource, fields, marshal_with, reqparse
+from flask_restful.inputs import int_range
 from sqlalchemy.orm import Session
 from werkzeug.exceptions import InternalServerError
 
@@ -27,6 +27,7 @@ from core.model_runtime.errors.invoke import InvokeError
 from extensions.ext_database import db
 from fields.workflow_app_log_fields import workflow_app_log_pagination_fields
 from libs import helper
+from libs.helper import TimestampField
 from models.model import App, AppMode, EndUser
 from models.workflow import WorkflowRun, WorkflowRunStatus
 from services.app_generate_service import AppGenerateService
@@ -44,8 +45,8 @@ workflow_run_fields = {
     "error": fields.String,
     "total_steps": fields.Integer,
     "total_tokens": fields.Integer,
-    "created_at": fields.DateTime,
-    "finished_at": fields.DateTime,
+    "created_at": TimestampField,
+    "finished_at": TimestampField,
     "elapsed_time": fields.Float,
 }
 
@@ -53,15 +54,15 @@ workflow_run_fields = {
 class WorkflowRunDetailApi(Resource):
     @validate_app_token
     @marshal_with(workflow_run_fields)
-    def get(self, app_model: App, workflow_id: str):
+    def get(self, app_model: App, workflow_run_id: str):
         """
         Get a workflow task running detail
         """
         app_mode = AppMode.value_of(app_model.mode)
-        if app_mode != AppMode.WORKFLOW:
+        if app_mode not in [AppMode.WORKFLOW, AppMode.ADVANCED_CHAT]:
             raise NotWorkflowAppError()
 
-        workflow_run = db.session.query(WorkflowRun).filter(WorkflowRun.id == workflow_id).first()
+        workflow_run = db.session.query(WorkflowRun).filter(WorkflowRun.id == workflow_run_id).first()
         return workflow_run
 
 
@@ -139,10 +140,10 @@ class WorkflowAppLogApi(Resource):
 
         args.status = WorkflowRunStatus(args.status) if args.status else None
         if args.created_at__before:
-            args.created_at__before = datetime.fromisoformat(args.created_at__before.replace("Z", "+00:00"))
+            args.created_at__before = isoparse(args.created_at__before)
 
         if args.created_at__after:
-            args.created_at__after = datetime.fromisoformat(args.created_at__after.replace("Z", "+00:00"))
+            args.created_at__after = isoparse(args.created_at__after)
 
         # get paginate workflow app logs
         workflow_app_service = WorkflowAppService()
@@ -162,6 +163,6 @@ class WorkflowAppLogApi(Resource):
 
 
 api.add_resource(WorkflowRunApi, "/workflows/run")
-api.add_resource(WorkflowRunDetailApi, "/workflows/run/<string:workflow_id>")
+api.add_resource(WorkflowRunDetailApi, "/workflows/run/<string:workflow_run_id>")
 api.add_resource(WorkflowTaskStopApi, "/workflows/tasks/<string:task_id>/stop")
 api.add_resource(WorkflowAppLogApi, "/workflows/logs")

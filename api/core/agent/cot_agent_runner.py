@@ -80,6 +80,7 @@ class CotAgentRunner(BaseAgentRunner, ABC):
                 llm_usage = final_llm_usage_dict["usage"]
                 llm_usage.prompt_tokens += usage.prompt_tokens
                 llm_usage.completion_tokens += usage.completion_tokens
+                llm_usage.total_tokens += usage.total_tokens
                 llm_usage.prompt_price += usage.prompt_price
                 llm_usage.completion_price += usage.completion_price
                 llm_usage.total_price += usage.total_price
@@ -191,7 +192,7 @@ class CotAgentRunner(BaseAgentRunner, ABC):
                     # action is final answer, return final answer directly
                     try:
                         if isinstance(scratchpad.action.action_input, dict):
-                            final_answer = json.dumps(scratchpad.action.action_input)
+                            final_answer = json.dumps(scratchpad.action.action_input, ensure_ascii=False)
                         elif isinstance(scratchpad.action.action_input, str):
                             final_answer = scratchpad.action.action_input
                         else:
