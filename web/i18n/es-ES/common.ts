@@ -54,6 +54,12 @@ const translation = {
     in: 'en',
     viewDetails: 'Ver detalles',
     copied: 'Copiado',
+    more: 'Más',
+    downloadSuccess: 'Descarga completada.',
+    downloadFailed: 'La descarga ha fallado. Por favor, inténtalo de nuevo más tarde.',
+    format: 'Formato',
+    deSelectAll: 'Deseleccionar todo',
+    selectAll: 'Seleccionar todo',
   },
   errorMsg: {
     fieldRequired: '{{field}} es requerido',
@@ -145,6 +151,8 @@ const translation = {
     newDataset: 'Crear Conocimiento',
     tools: 'Herramientas',
     exploreMarketplace: 'Explora el mercado',
+    appDetail: 'Detalles de la aplicación',
+    account: 'Cuenta',
   },
   userProfile: {
     settings: 'Configuraciones',
@@ -157,6 +165,9 @@ const translation = {
     community: 'Comunidad',
     about: 'Acerca de',
     logout: 'Cerrar sesión',
+    support: 'Apoyo',
+    compliance: 'Cumplimiento',
+    github: 'GitHub',
   },
   settings: {
     accountGroup: 'CUENTA',
@@ -206,6 +217,9 @@ const translation = {
     feedbackTitle: 'Retroalimentación',
     feedbackLabel: '¿Cuéntanos por qué eliminaste tu cuenta?',
     feedbackPlaceholder: 'Opcional',
+    workspaceIcon: 'Icono de espacio de trabajo',
+    editWorkspaceInfo: 'Editar información del espacio de trabajo',
+    workspaceName: 'Nombre del espacio de trabajo',
   },
   members: {
     team: 'Equipo',
@@ -459,7 +473,6 @@ const translation = {
   apiBasedExtension: {
     title: 'Las extensiones basadas en API proporcionan una gestión centralizada de API, simplificando la configuración para su fácil uso en las aplicaciones de Dify.',
     link: 'Aprende cómo desarrollar tu propia Extensión API.',
-    linkUrl: 'https://docs.dify.ai/en/guides/extension/api-based-extension/README',
     add: 'Agregar Extensión API',
     selector: {
       title: 'Extensión API',
@@ -544,9 +557,10 @@ const translation = {
       vectorHash: 'Hash de vector:',
       hitScore: 'Puntuación de recuperación:',
     },
-    inputPlaceholder: 'Hablar con el bot',
+    inputPlaceholder: 'Hablar con el {{botName}}',
     thinking: 'Pensamiento...',
     thought: 'Pensamiento',
+    resend: 'Reenviar',
   },
   promptEditor: {
     placeholder: 'Escribe tu palabra de indicación aquí, ingresa \'{\' para insertar una variable, ingresa \'/\' para insertar un bloque de contenido de indicación',
@@ -637,6 +651,26 @@ const translation = {
   pagination: {
     perPage: 'Elementos por página',
   },
+  theme: {
+    auto: 'sistema',
+    light: 'luz',
+    theme: 'Tema',
+    dark: 'noche',
+  },
+  compliance: {
+    iso27001: 'Certificación ISO 27001:2022',
+    gdpr: 'GDPR DPA',
+    soc2Type1: 'Informe SOC 2 Tipo I',
+    sandboxUpgradeTooltip: 'Solo disponible con un plan Profesional o de Equipo.',
+    professionalUpgradeTooltip: 'Solo disponible con un plan de equipo o superior.',
+    soc2Type2: 'Informe SOC 2 Tipo II',
+  },
+  imageInput: {
+    supportedFormats: 'Soporta PNG, JPG, JPEG, WEBP y GIF',
+    browse: 'navegar',
+    dropImageHere: 'Deja tu imagen aquí, o',
+  },
+  you: 'Tú',
 }
 
 export default translation

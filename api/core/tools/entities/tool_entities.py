@@ -240,6 +240,7 @@ class ToolParameter(PluginParameter):
         FILES = PluginParameterType.FILES.value
         APP_SELECTOR = PluginParameterType.APP_SELECTOR.value
         MODEL_SELECTOR = PluginParameterType.MODEL_SELECTOR.value
+        DYNAMIC_SELECT = PluginParameterType.DYNAMIC_SELECT.value
 
         # deprecated, should not use.
         SYSTEM_FILES = PluginParameterType.SYSTEM_FILES.value
@@ -279,7 +280,6 @@ class ToolParameter(PluginParameter):
         :param options: the options of the parameter
         """
         # convert options to ToolParameterOption
-        # FIXME fix the type error
         if options:
             option_objs = [
                 PluginParameterOption(value=option, label=I18nObject(en_US=option, zh_Hans=option))

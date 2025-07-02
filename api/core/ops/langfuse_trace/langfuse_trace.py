@@ -1,4 +1,3 @@
-import json
 import logging
 import os
 from datetime import datetime, timedelta
@@ -30,8 +29,9 @@ from core.ops.langfuse_trace.entities.langfuse_trace_entity import (
 )
 from core.ops.utils import filter_none_values
 from core.repositories import SQLAlchemyWorkflowNodeExecutionRepository
+from core.workflow.nodes.enums import NodeType
 from extensions.ext_database import db
-from models.model import EndUser
+from models import EndUser, WorkflowNodeExecutionTriggeredFrom
 
 logger = logging.getLogger(__name__)
 
@@ -83,6 +83,7 @@ class LangFuseDataTrace(BaseTraceInstance):
                 metadata=metadata,
                 session_id=trace_info.conversation_id,
                 tags=["message", "workflow"],
+                version=trace_info.workflow_run_version,
             )
             self.add_trace(langfuse_trace_data=trace_data)
             workflow_span_data = LangfuseSpan(
@@ -108,13 +109,24 @@ class LangFuseDataTrace(BaseTraceInstance):
                 metadata=metadata,
                 session_id=trace_info.conversation_id,
                 tags=["workflow"],
+                version=trace_info.workflow_run_version,
             )
             self.add_trace(langfuse_trace_data=trace_data)
 
         # through workflow_run_id get all_nodes_execution using repository
         session_factory = sessionmaker(bind=db.engine)
+        # Find the app's creator account
+        app_id = trace_info.metadata.get("app_id")
+        if not app_id:
+            raise ValueError("No app_id found in trace_info metadata")
+
+        service_account = self.get_service_account_with_tenant(app_id)
+
         workflow_node_execution_repository = SQLAlchemyWorkflowNodeExecutionRepository(
-            session_factory=session_factory, tenant_id=trace_info.tenant_id
+            session_factory=session_factory,
+            user=service_account,
+            app_id=trace_info.metadata.get("app_id"),
+            triggered_from=WorkflowNodeExecutionTriggeredFrom.WORKFLOW_RUN,
         )
 
         # Get all executions for this workflow run
@@ -124,23 +136,22 @@ class LangFuseDataTrace(BaseTraceInstance):
 
         for node_execution in workflow_node_executions:
             node_execution_id = node_execution.id
-            tenant_id = node_execution.tenant_id
-            app_id = node_execution.app_id
+            tenant_id = trace_info.tenant_id  # Use from trace_info instead
+            app_id = trace_info.metadata.get("app_id")  # Use from trace_info instead
             node_name = node_execution.title
             node_type = node_execution.node_type
             status = node_execution.status
-            if node_type == "llm":
-                inputs = (
-                    json.loads(node_execution.process_data).get("prompts", {}) if node_execution.process_data else {}
-                )
+            if node_type == NodeType.LLM:
+                inputs = node_execution.process_data.get("prompts", {}) if node_execution.process_data else {}
             else:
-                inputs = json.loads(node_execution.inputs) if node_execution.inputs else {}
-            outputs = json.loads(node_execution.outputs) if node_execution.outputs else {}
+                inputs = node_execution.inputs if node_execution.inputs else {}
+            outputs = node_execution.outputs if node_execution.outputs else {}
             created_at = node_execution.created_at or datetime.now()
             elapsed_time = node_execution.elapsed_time
             finished_at = created_at + timedelta(seconds=elapsed_time)
 
-            metadata = json.loads(node_execution.execution_metadata) if node_execution.execution_metadata else {}
+            execution_metadata = node_execution.metadata if node_execution.metadata else {}
+            metadata = {str(k): v for k, v in execution_metadata.items()}
             metadata.update(
                 {
                     "workflow_run_id": trace_info.workflow_run_id,
@@ -152,7 +163,7 @@ class LangFuseDataTrace(BaseTraceInstance):
                     "status": status,
                 }
             )
-            process_data = json.loads(node_execution.process_data) if node_execution.process_data else {}
+            process_data = node_execution.process_data if node_execution.process_data else {}
             model_provider = process_data.get("model_provider", None)
             model_name = process_data.get("model_name", None)
             if model_provider is not None and model_name is not None:
@@ -163,37 +174,7 @@ class LangFuseDataTrace(BaseTraceInstance):
                     }
                 )
 
-            # add span
-            if trace_info.message_id:
-                span_data = LangfuseSpan(
-                    id=node_execution_id,
-                    name=node_type,
-                    input=inputs,
-                    output=outputs,
-                    trace_id=trace_id,
-                    start_time=created_at,
-                    end_time=finished_at,
-                    metadata=metadata,
-                    level=(LevelEnum.DEFAULT if status == "succeeded" else LevelEnum.ERROR),
-                    status_message=trace_info.error or "",
-                    parent_observation_id=trace_info.workflow_run_id,
-                )
-            else:
-                span_data = LangfuseSpan(
-                    id=node_execution_id,
-                    name=node_type,
-                    input=inputs,
-                    output=outputs,
-                    trace_id=trace_id,
-                    start_time=created_at,
-                    end_time=finished_at,
-                    metadata=metadata,
-                    level=(LevelEnum.DEFAULT if status == "succeeded" else LevelEnum.ERROR),
-                    status_message=trace_info.error or "",
-                )
-
-            self.add_span(langfuse_span_data=span_data)
-
+            # add generation span
             if process_data and process_data.get("model_mode") == "chat":
                 total_token = metadata.get("total_tokens", 0)
                 prompt_tokens = 0
@@ -217,10 +198,10 @@ class LangFuseDataTrace(BaseTraceInstance):
                 )
 
                 node_generation_data = LangfuseGeneration(
-                    name="llm",
+                    id=node_execution_id,
+                    name=node_name,
                     trace_id=trace_id,
                     model=process_data.get("model_name"),
-                    parent_observation_id=node_execution_id,
                     start_time=created_at,
                     end_time=finished_at,
                     input=inputs,
@@ -228,10 +209,29 @@ class LangFuseDataTrace(BaseTraceInstance):
                     metadata=metadata,
                     level=(LevelEnum.DEFAULT if status == "succeeded" else LevelEnum.ERROR),
                     status_message=trace_info.error or "",
+                    parent_observation_id=trace_info.workflow_run_id if trace_info.message_id else None,
                     usage=generation_usage,
                 )
 
                 self.add_generation(langfuse_generation_data=node_generation_data)
+
+            # add normal span
+            else:
+                span_data = LangfuseSpan(
+                    id=node_execution_id,
+                    name=node_name,
+                    input=inputs,
+                    output=outputs,
+                    trace_id=trace_id,
+                    start_time=created_at,
+                    end_time=finished_at,
+                    metadata=metadata,
+                    level=(LevelEnum.DEFAULT if status == "succeeded" else LevelEnum.ERROR),
+                    status_message=trace_info.error or "",
+                    parent_observation_id=trace_info.workflow_run_id if trace_info.message_id else None,
+                )
+
+                self.add_span(langfuse_span_data=span_data)
 
     def message_trace(self, trace_info: MessageTraceInfo, **kwargs):
         # get message file data
@@ -275,7 +275,7 @@ class LangFuseDataTrace(BaseTraceInstance):
         )
         self.add_trace(langfuse_trace_data=trace_data)
 
-        # start add span
+        # add generation
         generation_usage = GenerationUsage(
             input=trace_info.message_tokens,
             output=trace_info.answer_tokens,

@@ -62,6 +62,7 @@ const translation = {
       params: 'AKIL YÜRÜTME YAPILANDIRMASI',
       paramsTip2: '\'Otomatik\' kapalıyken, varsayılan değer kullanılır.',
       unsupportedTitle: 'Desteklenmeyen Eylem',
+      toolSetting: 'Araç Ayarları',
     },
     strategyNum: '{{sayı}} {{strateji}} DAHİL',
     switchVersion: 'Sürümü Değiştir',
@@ -136,6 +137,7 @@ const translation = {
     readyToInstallPackages: 'Aşağıdaki {{num}} eklentilerini yüklemek üzereyim',
     dropPluginToInstall: 'Yüklemek için eklenti paketini buraya bırakın',
     installPlugin: 'Eklentiyi Yükle',
+    installWarning: 'Bu eklentinin yüklenmesine izin verilmemektedir.',
   },
   installFromGitHub: {
     installedSuccessfully: 'Yükleme başarılı',
@@ -180,6 +182,8 @@ const translation = {
     noPluginFound: 'Eklenti bulunamadı',
     viewMore: 'Daha fazla göster',
     discover: 'Keşfetmek',
+    verifiedTip: 'Dify tarafından doğrulanmıştır.',
+    partnerTip: 'Dify partner\'ı tarafından doğrulandı',
   },
   task: {
     installedError: '{{errorLength}} eklentileri yüklenemedi',
@@ -194,7 +198,6 @@ const translation = {
   search: 'Aramak',
   install: '{{num}} yükleme',
   searchPlugins: 'Eklentileri ara',
-  submitPlugin: 'Eklenti gönder',
   searchTools: 'Arama araçları...',
   fromMarketplace: 'Pazar Yerinden',
   installPlugin: 'Eklentiyi yükle',
@@ -204,6 +207,12 @@ const translation = {
   findMoreInMarketplace: 'Marketplace\'te daha fazla bilgi edinin',
   searchCategories: 'Arama Kategorileri',
   searchInMarketplace: 'Marketplace\'te arama yapma',
+  metadata: {
+    title: 'Eklentiler',
+  },
+  difyVersionNotCompatible: 'Mevcut Dify sürümü bu eklentiyle uyumlu değil, lütfen gerekli minimum sürüme güncelleyin: {{minimalDifyVersion}}',
+  requestAPlugin: 'Bir eklenti iste',
+  publishPlugins: 'Eklentileri yayınlayın',
 }
 
 export default translation

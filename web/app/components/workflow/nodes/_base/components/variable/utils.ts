@@ -613,6 +613,7 @@ const getIterationItemType = ({
   const isSystem = isSystemVar(valueSelector)
 
   const targetVar = isSystem ? beforeNodesOutputVars.find(v => v.isStartNode) : beforeNodesOutputVars.find(v => v.nodeId === outputVarNodeId)
+
   if (!targetVar)
     return VarType.string
 
@@ -623,9 +624,9 @@ const getIterationItemType = ({
     arrayType = curr.find((v: any) => v.variable === (valueSelector).join('.'))?.type
   }
   else {
-    for (let i = 1; i < valueSelector.length - 1; i++) {
+    for (let i = 1; i < valueSelector.length; i++) {
       const key = valueSelector[i]
-      const isLast = i === valueSelector.length - 2
+      const isLast = i === valueSelector.length - 1
       curr = Array.isArray(curr) ? curr.find(v => v.variable === key) : []
 
       if (isLast)
@@ -1089,13 +1090,13 @@ export const getNodeUsedVarPassToServerKey = (node: Node, valueSelector: ValueSe
       break
     }
     case BlockEnum.Code: {
-      const targetVar = (data as CodeNodeType).variables?.find(v => v.value_selector.join('.') === valueSelector.join('.'))
+      const targetVar = (data as CodeNodeType).variables?.find(v => Array.isArray(v.value_selector) && v.value_selector && v.value_selector.join('.') === valueSelector.join('.'))
       if (targetVar)
         res = targetVar.variable
       break
     }
     case BlockEnum.TemplateTransform: {
-      const targetVar = (data as TemplateTransformNodeType).variables?.find(v => v.value_selector.join('.') === valueSelector.join('.'))
+      const targetVar = (data as TemplateTransformNodeType).variables?.find(v => Array.isArray(v.value_selector) && v.value_selector && v.value_selector.join('.') === valueSelector.join('.'))
       if (targetVar)
         res = targetVar.variable
       break

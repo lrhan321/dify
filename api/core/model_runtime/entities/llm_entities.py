@@ -1,7 +1,7 @@
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 from decimal import Decimal
 from enum import StrEnum
-from typing import Optional
+from typing import Any, Optional
 
 from pydantic import BaseModel, Field
 
@@ -16,19 +16,6 @@ class LLMMode(StrEnum):
 
     COMPLETION = "completion"
     CHAT = "chat"
-
-    @classmethod
-    def value_of(cls, value: str) -> "LLMMode":
-        """
-        Get value of given mode.
-
-        :param value: mode value
-        :return: mode
-        """
-        for mode in cls:
-            if mode.value == value:
-                return mode
-        raise ValueError(f"invalid mode value {value}")
 
 
 class LLMUsage(ModelUsage):
@@ -114,6 +101,20 @@ class LLMResult(BaseModel):
     system_fingerprint: Optional[str] = None
 
 
+class LLMStructuredOutput(BaseModel):
+    """
+    Model class for llm structured output.
+    """
+
+    structured_output: Optional[Mapping[str, Any]] = None
+
+
+class LLMResultWithStructuredOutput(LLMResult, LLMStructuredOutput):
+    """
+    Model class for llm result with structured output.
+    """
+
+
 class LLMResultChunkDelta(BaseModel):
     """
     Model class for llm result chunk delta.
@@ -134,6 +135,12 @@ class LLMResultChunk(BaseModel):
     prompt_messages: Sequence[PromptMessage] = Field(default_factory=list)
     system_fingerprint: Optional[str] = None
     delta: LLMResultChunkDelta
+
+
+class LLMResultChunkWithStructuredOutput(LLMResultChunk, LLMStructuredOutput):
+    """
+    Model class for llm result chunk with structured output.
+    """
 
 
 class NumTokensResult(PriceInfo):
