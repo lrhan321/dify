@@ -518,7 +518,7 @@ services:
   # API service
   api:
     image: langgenius/dify-api:1.5.0
-    restart: always
+    restart: no
     environment:
       # Use the shared environment variables.
       <<: *shared-api-worker-env
@@ -549,7 +549,7 @@ services:
   # The Celery worker for processing the queue.
   worker:
     image: langgenius/dify-api:1.5.0
-    restart: always
+    restart: no
     environment:
       # Use the shared environment variables.
       <<: *shared-api-worker-env
@@ -575,7 +575,7 @@ services:
   # Frontend web application.
   web:
     image: langgenius/dify-web:1.5.0
-    restart: always
+    restart: no
     environment:
       CONSOLE_API_URL: ${CONSOLE_API_URL:-}
       APP_API_URL: ${APP_API_URL:-}
@@ -641,7 +641,7 @@ services:
   # The DifySandbox
   sandbox:
     image: langgenius/dify-sandbox:0.2.12
-    restart: always
+    restart: no
     environment:
       # The DifySandbox configurations
       # Make sure you are changing this key for your deployment with a strong key.
@@ -668,7 +668,7 @@ services:
   # plugin daemon
   plugin_daemon:
     image: langgenius/dify-plugin-daemon:0.1.2-local
-    restart: always
+    restart: no
     environment:
       # Use the shared environment variables.
       <<: *shared-api-worker-env
@@ -904,7 +904,7 @@ services:
     image: vastdata/vastbase-vector
     profiles:
       - vastbase
-    restart: always
+    restart: no
     environment:
       - VB_DBCOMPATIBILITY=PG
       - VB_DB=dify
@@ -1148,7 +1148,7 @@ services:
     image: matrixorigin/matrixone:2.1.1
     profiles:
       - matrixone
-    restart: always
+    restart: no
     volumes:
       - ./volumes/matrixone/data:/mo-data
     ports:
