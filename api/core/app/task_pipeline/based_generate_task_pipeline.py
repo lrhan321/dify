@@ -19,6 +19,7 @@ from core.app.entities.task_entities import (
 from core.errors.error import QuotaExceededError
 from core.model_runtime.errors.invoke import InvokeAuthorizationError, InvokeError
 from core.moderation.output_moderation import ModerationRule, OutputModeration
+from models.enums import MessageStatus
 from models.model import Message
 
 logger = logging.getLogger(__name__)
@@ -36,7 +37,7 @@ class BasedGenerateTaskPipeline:
         stream: bool,
     ) -> None:
         self._application_generate_entity = application_generate_entity
-        self._queue_manager = queue_manager
+        self.queue_manager = queue_manager
         self._start_at = time.perf_counter()
         self._output_moderation_handler = self._init_output_moderation()
         self._stream = stream
@@ -51,7 +52,8 @@ class BasedGenerateTaskPipeline:
         elif isinstance(e, InvokeError | ValueError):
             err = e
         else:
-            err = Exception(e.description if getattr(e, "description", None) is not None else str(e))
+            description = getattr(e, "description", None)
+            err = Exception(description if description is not None else str(e))
 
         if not message_id or not session:
             return err
@@ -62,7 +64,7 @@ class BasedGenerateTaskPipeline:
             return err
 
         err_desc = self._error_to_desc(err)
-        message.status = "error"
+        message.status = MessageStatus.ERROR
         message.error = err_desc
         return err
 
@@ -112,7 +114,7 @@ class BasedGenerateTaskPipeline:
                 tenant_id=app_config.tenant_id,
                 app_id=app_config.app_id,
                 rule=ModerationRule(type=sensitive_word_avoidance.type, config=sensitive_word_avoidance.config),
-                queue_manager=self._queue_manager,
+                queue_manager=self.queue_manager,
             )
         return None
 

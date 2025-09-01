@@ -4,9 +4,9 @@ const translation = {
     redo: '다시 실행',
     editing: '편집 중',
     autoSaved: '자동 저장됨',
-    unpublished: '미발행',
-    published: '발행됨',
-    publish: '발행',
+    unpublished: '게시되지 않음',
+    published: '게시됨',
+    publish: '게시하기',
     update: '업데이트',
     run: '실행',
     running: '실행 중',
@@ -43,7 +43,8 @@ const translation = {
     previewPlaceholder: '디버깅을 시작하려면 아래 상자에 내용을 입력하세요',
     effectVarConfirm: {
       title: '변수 제거',
-      content: '변수가 다른 노드에서 사용되고 있습니다. 그래도 제거하시겠습니까?',
+      content:
+        '변수가 다른 노드에서 사용되고 있습니다. 그래도 제거하시겠습니까?',
     },
     insertVarTip: '빠르게 삽입하려면 \'/\' 키를 누르세요',
     processData: '데이터 처리',
@@ -58,7 +59,7 @@ const translation = {
     duplicate: '복제',
     pasteHere: '여기에 붙여넣기',
     pointerMode: '포인터 모드',
-    handMode: '핸드 모드',
+    handMode: '드래그 모드',
     model: '모델',
     workflowAsTool: '도구로서의 워크플로우',
     configureRequired: '구성 필요',
@@ -73,7 +74,8 @@ const translation = {
     overwriteAndImport: '덮어쓰기 및 가져오기',
     importSuccess: '가져오기 성공',
     syncingData: '단 몇 초 만에 데이터를 동기화할 수 있습니다.',
-    importDSLTip: '현재 초안을 덮어씁니다. 가져오기 전에 워크플로를 백업으로 내보냅니다.',
+    importDSLTip:
+      '현재 초안을 덮어씁니다. 가져오기 전에 워크플로우를 백업으로 내보냅니다.',
     parallelTip: {
       click: {
         title: '클릭',
@@ -95,9 +97,11 @@ const translation = {
     featuresDocLink: '더 알아보세요',
     fileUploadTip: '이미지 업로드 기능이 파일 업로드로 업그레이드되었습니다.',
     featuresDescription: '웹앱 사용자 경험 향상',
-    ImageUploadLegacyTip: '이제 시작 양식에서 파일 형식 변수를 만들 수 있습니다. 앞으로 이미지 업로드 기능은 더 이상 지원되지 않습니다.',
+    ImageUploadLegacyTip:
+      '이제 시작 양식에서 파일 형식 변수를 만들 수 있습니다. 앞으로 이미지 업로드 기능은 더 이상 지원되지 않습니다.',
     importWarning: '주의',
-    importWarningDetails: 'DSL 버전 차이는 특정 기능에 영향을 미칠 수 있습니다.',
+    importWarningDetails:
+      'DSL 버전 차이는 특정 기능에 영향을 미칠 수 있습니다.',
     openInExplore: 'Explore 에서 열기',
     onFailure: '실패 시',
     addFailureBranch: '실패 분기 추가',
@@ -107,18 +111,20 @@ const translation = {
     exportJPEG: 'JPEG 로 내보내기',
     exitVersions: '종료 버전',
     exportImage: '이미지 내보내기',
-    noExist: '해당 변수가 없습니다.',
     exportSVG: 'SVG 로 내보내기',
     versionHistory: '버전 기록',
     exportPNG: 'PNG 로 내보내기',
-    referenceVar: '참조 변수',
     addBlock: '노드 추가',
     needAnswerNode: '답변 노드를 추가해야 합니다.',
     needEndNode: '종단 노드를 추가해야 합니다.',
+    tagBound: '이 태그를 사용하는 앱 수',
+    currentView: '현재 보기',
+    currentWorkflow: '현재 워크플로',
   },
   env: {
     envPanelTitle: '환경 변수',
-    envDescription: '환경 변수는 개인 정보와 자격 증명을 저장하는 데 사용될 수 있습니다. 이들은 읽기 전용이며 내보내기 중에 DSL 파일과 분리할 수 있습니다.',
+    envDescription:
+      '환경 변수는 개인 정보와 자격 증명을 저장하는 데 사용될 수 있습니다. 이들은 읽기 전용이며 내보내기 중에 DSL 파일과 분리할 수 있습니다.',
     envPanelButton: '변수 추가',
     modal: {
       title: '환경 변수 추가',
@@ -128,7 +134,10 @@ const translation = {
       namePlaceholder: '환경 이름',
       value: '값',
       valuePlaceholder: '환경 값',
-      secretTip: '민감한 정보나 데이터를 정의하는 데 사용되며, DSL 설정은 유출 방지를 위해 구성됩니다.',
+      secretTip:
+        '민감한 정보나 데이터를 정의하는 데 사용되며, DSL 설정은 유출 방지를 위해 구성됩니다.',
+      description: '설명',
+      descriptionPlaceholder: '변수에 대해 설명하세요',
     },
     export: {
       title: '비밀 환경 변수를 내보내시겠습니까?',
@@ -139,7 +148,8 @@ const translation = {
   },
   chatVariable: {
     panelTitle: '대화 변수',
-    panelDescription: '대화 변수는 LLM 이 기억해야 할 대화 기록, 업로드된 파일, 사용자 선호도 등의 상호작용 정보를 저장하는 데 사용됩니다. 이들은 읽기 및 쓰기가 가능합니다.',
+    panelDescription:
+      '대화 변수는 LLM 이 기억해야 할 대화 기록, 업로드된 파일, 사용자 선호도 등의 상호작용 정보를 저장하는 데 사용됩니다. 이들은 읽기 및 쓰기가 가능합니다.',
     docLink: '자세한 내용은 문서를 참조하세요.',
     button: '변수 추가',
     modal: {
@@ -169,7 +179,8 @@ const translation = {
     placeholder: '아직 아무 것도 변경하지 않았습니다',
     clearHistory: '기록 지우기',
     hint: '힌트',
-    hintText: '편집 작업이 변경 기록에 추적되며, 이 세션 동안 기기에 저장됩니다. 편집기를 떠나면 이 기록이 지워집니다.',
+    hintText:
+      '편집 작업이 변경 기록에 추적되며, 이 세션 동안 기기에 저장됩니다. 편집기를 떠나면 이 기록이 지워집니다.',
     stepBackward_one: '{{count}} 단계 뒤로',
     stepBackward_other: '{{count}} 단계 뒤로',
     stepForward_one: '{{count}} 단계 앞으로',
@@ -203,7 +214,8 @@ const translation = {
       visionVariable: '비전 변수',
     },
     invalidVariable: '잘못된 변수',
-    rerankModelRequired: 'Rerank Model 을 켜기 전에 설정에서 모델이 성공적으로 구성되었는지 확인하십시오.',
+    rerankModelRequired:
+      'Rerank Model 을 켜기 전에 설정에서 모델이 성공적으로 구성되었는지 확인하십시오.',
     noValidTool: '{{field}} 유효한 도구가 선택되지 않았습니다.',
     toolParameterRequired: '{{field}}: 매개변수 [{{param}}] 이 필요합니다.',
   },
@@ -219,7 +231,6 @@ const translation = {
   tabs: {
     'tools': '도구',
     'allTool': '전체',
-    'builtInTool': '내장',
     'customTool': '사용자 정의',
     'workflowTool': '워크플로우',
     'question-understand': '질문 이해',
@@ -232,6 +243,8 @@ const translation = {
     'agent': '에이전트 전략',
     'blocks': '노드',
     'searchBlock': '검색 노드',
+    'allAdded': '모두 추가됨',
+    'addAll': '모두 추가',
   },
   blocks: {
     'start': '시작',
@@ -262,22 +275,34 @@ const translation = {
     'end': '워크플로우의 종료 및 결과 유형을 정의합니다',
     'answer': '대화의 답변 내용을 정의합니다',
     'llm': '질문에 답하거나 자연어를 처리하기 위해 대형 언어 모델을 호출합니다',
-    'knowledge-retrieval': '사용자 질문과 관련된 텍스트 콘텐츠를 지식 베이스에서 쿼리할 수 있습니다',
-    'question-classifier': '사용자 질문의 분류 조건을 정의합니다. LLM 은 분류 설명을 기반으로 대화의 진행 방식을 정의할 수 있습니다',
-    'if-else': 'if/else 조건을 기반으로 워크플로우를 두 가지 분기로 나눌 수 있습니다',
+    'knowledge-retrieval':
+      '사용자 질문과 관련된 텍스트 콘텐츠를 지식 베이스에서 쿼리할 수 있습니다',
+    'question-classifier':
+      '사용자 질문의 분류 조건을 정의합니다. LLM 은 분류 설명을 기반으로 대화의 진행 방식을 정의할 수 있습니다',
+    'if-else':
+      'if/else 조건을 기반으로 워크플로우를 두 가지 분기로 나눌 수 있습니다',
     'code': '사용자 정의 논리를 구현하기 위해 Python 또는 NodeJS 코드를 실행합니다',
-    'template-transform': 'Jinja 템플릿 구문을 사용하여 데이터를 문자열로 변환합니다',
+    'template-transform':
+      'Jinja 템플릿 구문을 사용하여 데이터를 문자열로 변환합니다',
     'http-request': 'HTTP 프로토콜을 통해 서버 요청을 보낼 수 있습니다',
-    'variable-assigner': '다중 분기 변수들을 하나의 변수로 집계하여 다운스트림 노드의 통합 구성을 가능하게 합니다.',
-    'assigner': '변수 할당 노드는 쓰기 가능한 변수 (대화 변수 등) 에 값을 할당하는 데 사용됩니다.',
-    'variable-aggregator': '다중 분기 변수들을 하나의 변수로 집계하여 다운스트림 노드의 통합 구성을 가능하게 합니다.',
-    'iteration': '목록 객체에서 여러 단계를 수행하여 모든 결과가 출력될 때까지 반복합니다.',
-    'parameter-extractor': '도구 호출 또는 HTTP 요청을 위해 자연어에서 구조화된 매개변수를 추출하기 위해 LLM 을 사용합니다.',
-    'document-extractor': '업로드된 문서를 LLM 에서 쉽게 이해할 수 있는 텍스트 콘텐츠로 구문 분석하는 데 사용됩니다.',
+    'variable-assigner':
+      '다중 분기 변수들을 하나의 변수로 집계하여 다운스트림 노드의 통합 구성을 가능하게 합니다.',
+    'assigner':
+      '변수 할당 노드는 쓰기 가능한 변수 (대화 변수 등) 에 값을 할당하는 데 사용됩니다.',
+    'variable-aggregator':
+      '다중 분기 변수들을 하나의 변수로 집계하여 다운스트림 노드의 통합 구성을 가능하게 합니다.',
+    'iteration':
+      '목록 객체에서 여러 단계를 수행하여 모든 결과가 출력될 때까지 반복합니다.',
+    'parameter-extractor':
+      '도구 호출 또는 HTTP 요청을 위해 자연어에서 구조화된 매개변수를 추출하기 위해 LLM 을 사용합니다.',
+    'document-extractor':
+      '업로드된 문서를 LLM 에서 쉽게 이해할 수 있는 텍스트 콘텐츠로 구문 분석하는 데 사용됩니다.',
     'list-operator': '배열 내용을 필터링하거나 정렬하는 데 사용됩니다.',
-    'agent': '질문에 답하거나 자연어를 처리하기 위해 대규모 언어 모델을 호출하는 경우',
+    'agent':
+      '질문에 답하거나 자연어를 처리하기 위해 대규모 언어 모델을 호출하는 경우',
     'loop': '종료 조건이 충족되거나 최대 반복 횟수에 도달할 때까지 논리 루프를 실행합니다.',
-    'loop-end': '"break"와 동일합니다. 이 노드는 구성 항목이 없습니다. 루프 본문이 이 노드에 도달하면 루프가 종료됩니다.',
+    'loop-end':
+      '"break"와 동일합니다. 이 노드는 구성 항목이 없습니다. 루프 본문이 이 노드에 도달하면 루프가 종료됩니다.',
   },
   operator: {
     zoomIn: '확대',
@@ -285,6 +310,18 @@ const translation = {
     zoomTo50: '50% 로 확대',
     zoomTo100: '100% 로 확대',
     zoomToFit: '화면에 맞게 확대',
+    alignCenter: '중앙',
+    alignRight: '오른쪽',
+    alignLeft: '왼쪽',
+    vertical: '세로',
+    alignTop: '상단',
+    alignMiddle: '중간',
+    alignNodes: '노드 정렬',
+    distributeVertical: '수직 등간격',
+    horizontal: '가로',
+    selectionAlignment: '선택 정렬',
+    alignBottom: '하단',
+    distributeHorizontal: '수평 등간격',
   },
   panel: {
     userInputField: '사용자 입력 필드',
@@ -304,7 +341,7 @@ const translation = {
     changeBlock: '노드 변경',
     addNextStep: '이 워크플로우에 다음 단계를 추가하세요.',
     minimize: '전체 화면 종료',
-    maximize: '캔버스를 최대화하다',
+    maximize: '캔버스 전체 화면',
   },
   nodes: {
     common: {
@@ -338,9 +375,12 @@ const translation = {
         failBranch: {
           title: '실패 분기',
           desc: '오류가 발생하면 예외 분기를 실행합니다',
-          customize: '캔버스로 이동하여 fail branch logic 를 사용자 지정합니다.',
-          inLog: '노드 예외는 실패 분기를 자동으로 실행합니다. 노드 출력은 오류 유형 및 오류 메시지를 반환하고 다운스트림으로 전달합니다.',
-          customizeTip: 'fail 분기가 활성화되면 노드에서 throw 된 예외가 프로세스를 종료하지 않습니다. 대신 미리 정의된 실패 분기를 자동으로 실행하여 오류 메시지, 보고서, 수정 사항을 유연하게 제공하거나 작업을 건너뛸 수 있습니다.',
+          customize:
+            '캔버스로 이동하여 fail branch logic 를 사용자 지정합니다.',
+          inLog:
+            '노드 예외는 실패 분기를 자동으로 실행합니다. 노드 출력은 오류 유형 및 오류 메시지를 반환하고 다운스트림으로 전달합니다.',
+          customizeTip:
+            'fail 분기가 활성화되면 노드에서 throw 된 예외가 프로세스를 종료하지 않습니다. 대신 미리 정의된 실패 분기를 자동으로 실행하여 오류 메시지, 보고서, 수정 사항을 유연하게 제공하거나 작업을 건너뛸 수 있습니다.',
         },
         partialSucceeded: {
           tip: '프로세스에 {{num}} 노드가 비정상적으로 실행 중입니다. 추적으로 이동하여 로그를 확인하십시오.',
@@ -358,9 +398,13 @@ const translation = {
         retrySuccessful: '재시도 성공',
         retryFailed: '재시도 실패',
         retryFailedTimes: '{{times}} 재시도 실패',
-        times: '배',
+        times: '번',
         ms: '미에스',
         retries: '{{숫자}} 재시도',
+      },
+      typeSwitch: {
+        input: '입력 값',
+        variable: '변수를 사용하세요',
       },
     },
     start: {
@@ -399,7 +443,8 @@ const translation = {
       variables: '변수',
       context: '컨텍스트',
       contextTooltip: '컨텍스트로 지식을 가져올 수 있습니다',
-      notSetContextInPromptTip: '컨텍스트 기능을 활성화하려면 PROMPT 에 컨텍스트 변수를 입력하세요.',
+      notSetContextInPromptTip:
+        '컨텍스트 기능을 활성화하려면 PROMPT 에 컨텍스트 변수를 입력하세요.',
       prompt: '프롬프트',
       roleDescription: {
         system: '대화를 위한 고급 지침 제공',
@@ -443,8 +488,10 @@ const translation = {
         stringValidations: '문자열 검증',
         showAdvancedOptions: '고급 옵션 표시',
         promptPlaceholder: '당신의 JSON 스키마를 설명하세요...',
-        generationTip: '자연어를 사용하여 JSON 스키마를 신속하게 생성할 수 있습니다.',
-        resultTip: '여기 생성된 결과가 있습니다. 만약 만족하지 않으신다면, 돌아가서 프롬프트를 수정할 수 있습니다.',
+        generationTip:
+          '자연어를 사용하여 JSON 스키마를 신속하게 생성할 수 있습니다.',
+        resultTip:
+          '여기 생성된 결과가 있습니다. 만약 만족하지 않으신다면, 돌아가서 프롬프트를 수정할 수 있습니다.',
         regenerate: '재생하다',
         required: '필수',
         doc: '구조화된 출력에 대해 더 알아보세요.',
@@ -470,7 +517,8 @@ const translation = {
           },
           automatic: {
             desc: '쿼리 변수를 기반으로 메타데이터 필터링 조건을 자동으로 생성합니다.',
-            subTitle: '사용자 쿼리를 기반으로 메타데이터 필터링 조건을 자동으로 생성합니다.',
+            subTitle:
+              '사용자 쿼리를 기반으로 메타데이터 필터링 조건을 자동으로 생성합니다.',
             title: '자동',
           },
           manual: {
@@ -488,6 +536,7 @@ const translation = {
           conditions: '조건',
         },
         title: '메타데이터 필터링',
+        tip: '메타데이터 필터링은 시스템 내에서 관련 정보를 검색하는 과정을 정제하고 제어하기 위해 메타데이터 속성(예: 태그, 카테고리 또는 접근 권한)을 사용하는 과정입니다.',
       },
     },
     http: {
@@ -537,13 +586,19 @@ const translation = {
         title: 'cURL 에서 가져오기',
         placeholder: '여기에 cURL 문자열 붙여 넣기',
       },
+      verifySSL: {
+        title: 'SSL 인증서 확인',
+        warningTooltip: 'SSL 검증을 비활성화하는 것은 프로덕션 환경에서는 권장되지 않습니다. 이는 연결이 중간자 공격과 같은 보안 위협에 취약하게 만들므로 개발 또는 테스트에서만 사용해야 합니다.',
+      },
     },
     code: {
       inputVars: '입력 변수',
       outputVars: '출력 변수',
       advancedDependencies: '고급 종속성',
-      advancedDependenciesTip: '더 많은 시간이 소요되거나 기본으로 내장되지 않은 일부 미리 로드된 종속성을 여기에 추가하세요',
+      advancedDependenciesTip:
+        '더 많은 시간이 소요되거나 기본으로 내장되지 않은 일부 미리 로드된 종속성을 여기에 추가하세요',
       searchDependencies: '종속성 검색',
+      syncFunctionSignature: '코드에 함수 시그니처 동기화하기',
     },
     templateTransform: {
       inputVars: '입력 변수',
@@ -556,7 +611,8 @@ const translation = {
     ifElse: {
       if: 'If',
       else: 'Else',
-      elseDescription: 'If 조건이 충족되지 않을 때 실행할 논리를 정의하는 데 사용됩니다.',
+      elseDescription:
+        'If 조건이 충족되지 않을 때 실행할 논리를 정의하는 데 사용됩니다.',
       and: '그리고',
       or: '또는',
       operator: '연산자',
@@ -572,7 +628,6 @@ const translation = {
         'not empty': '비어 있지 않음',
         'null': 'null 임',
         'not null': 'null 이 아님',
-        'regex match': '정규식 일치',
         'in': '안으로',
         'exists': '존재',
         'all of': '모두의',
@@ -595,7 +650,6 @@ const translation = {
       },
       select: '고르다',
       addSubVariable: '하위 변수',
-      condition: '조건',
     },
     variableAssigner: {
       title: '변수 할당',
@@ -609,7 +663,8 @@ const translation = {
         array: '배열',
       },
       aggregationGroup: '집계 그룹',
-      aggregationGroupTip: '이 기능을 활성화하면 변수 집계자가 여러 변수 집합을 집계할 수 있습니다.',
+      aggregationGroupTip:
+        '이 기능을 활성화하면 변수 집계자가 여러 변수 집합을 집계할 수 있습니다.',
       addGroup: '그룹 추가',
       outputVars: {
         varDescribe: '{{groupName}} 출력',
@@ -645,7 +700,8 @@ const translation = {
       'noAssignedVars': '사용 가능한 할당된 변수가 없습니다.',
       'noVarTip': '"+" 버튼을 클릭하여 변수를 추가합니다.',
       'setParameter': '매개 변수 설정...',
-      'assignedVarsDescription': '할당된 변수는 대화 변수와 같은 쓰기 가능한 변수여야 합니다.',
+      'assignedVarsDescription':
+        '할당된 변수는 대화 변수와 같은 쓰기 가능한 변수여야 합니다.',
       'selectAssignedVariable': '할당된 변수 선택...',
       'varNotSet': '변수가 설정되지 않음',
     },
@@ -663,12 +719,16 @@ const translation = {
         json: '도구로 생성된 JSON',
       },
       authorize: '권한 부여',
+      insertPlaceholder1: '타이프하거나 누르세요',
+      settings: '설정',
+      insertPlaceholder2: '변수를 삽입하다',
     },
     questionClassifiers: {
       model: '모델',
       inputVars: '입력 변수',
       outputVars: {
         className: '클래스 이름',
+        usage: '모델 사용 정보',
       },
       class: '클래스',
       classNamePlaceholder: '클래스 이름을 작성하세요',
@@ -677,11 +737,17 @@ const translation = {
       topicPlaceholder: '주제 이름을 작성하세요',
       addClass: '클래스 추가',
       instruction: '지시',
-      instructionTip: '질문 분류기가 질문을 더 잘 분류할 수 있도록 추가 지시를 입력하세요.',
+      instructionTip:
+        '질문 분류기가 질문을 더 잘 분류할 수 있도록 추가 지시를 입력하세요.',
       instructionPlaceholder: '지시를 작성하세요',
     },
     parameterExtractor: {
       inputVar: '입력 변수',
+      outputVars: {
+        isSuccess: '성공 여부. 성공 시 값은 1 이고, 실패 시 값은 0 입니다.',
+        errorReason: '오류 원인',
+        usage: '모델 사용 정보',
+      },
       extractParameters: '매개변수 추출',
       importFromTool: '도구에서 가져오기',
       addExtractParameter: '추출 매개변수 추가',
@@ -693,16 +759,17 @@ const translation = {
         description: '설명',
         descriptionPlaceholder: '추출 매개변수 설명',
         required: '필수',
-        requiredContent: '필수는 모델 추론을 위한 참고 용도로만 사용되며, 매개변수 출력의 필수 유효성 검사는 아닙니다.',
+        requiredContent:
+          '필수는 모델 추론을 위한 참고 용도로만 사용되며, 매개변수 출력의 필수 유효성 검사는 아닙니다.',
       },
       extractParametersNotSet: '추출 매개변수가 설정되지 않음',
       instruction: '지시',
-      instructionTip: '매개변수 추출기가 매개변수를 추출하는 방법을 이해하는 데 도움이 되는 추가 지시를 입력하세요.',
+      instructionTip:
+        '매개변수 추출기가 매개변수를 추출하는 방법을 이해하는 데 도움이 되는 추가 지시를 입력하세요.',
       advancedSetting: '고급 설정',
       reasoningMode: '추론 모드',
-      reasoningModeTip: '모델의 함수 호출 또는 프롬프트에 대한 지시 응답 능력을 기반으로 적절한 추론 모드를 선택할 수 있습니다.',
-      isSuccess: '성공 여부. 성공 시 값은 1 이고, 실패 시 값은 0 입니다.',
-      errorReason: '오류 원인',
+      reasoningModeTip:
+        '모델의 함수 호출 또는 프롬프트에 대한 지시 응답 능력을 기반으로 적절한 추론 모드를 선택할 수 있습니다.',
     },
     iteration: {
       deleteTitle: '반복 노드를 삭제하시겠습니까?',
@@ -726,9 +793,12 @@ const translation = {
       error_other: '{{개수}} 오류',
       parallelModeEnableTitle: 'Parallel Mode Enabled(병렬 모드 사용)',
       parallelPanelDesc: '병렬 모드에서 반복의 작업은 병렬 실행을 지원합니다.',
-      parallelModeEnableDesc: '병렬 모드에서는 반복 내의 작업이 병렬 실행을 지원합니다. 오른쪽의 속성 패널에서 이를 구성할 수 있습니다.',
-      MaxParallelismDesc: '최대 병렬 처리는 단일 반복에서 동시에 실행되는 작업 수를 제어하는 데 사용됩니다.',
-      answerNodeWarningDesc: '병렬 모드 경고: 응답 노드, 대화 변수 할당 및 반복 내의 지속적인 읽기/쓰기 작업으로 인해 예외가 발생할 수 있습니다.',
+      parallelModeEnableDesc:
+        '병렬 모드에서는 반복 내의 작업이 병렬 실행을 지원합니다. 오른쪽의 속성 패널에서 이를 구성할 수 있습니다.',
+      MaxParallelismDesc:
+        '최대 병렬 처리는 단일 반복에서 동시에 실행되는 작업 수를 제어하는 데 사용됩니다.',
+      answerNodeWarningDesc:
+        '병렬 모드 경고: 응답 노드, 대화 변수 할당 및 반복 내의 지속적인 읽기/쓰기 작업으로 인해 예외가 발생할 수 있습니다.',
     },
     note: {
       editor: {
@@ -778,12 +848,14 @@ const translation = {
     agent: {
       strategy: {
         label: '에이전트 전략',
-        tooltip: '다양한 에이전트 전략은 시스템이 다단계 도구 호출을 계획하고 실행하는 방법을 결정합니다',
+        tooltip:
+          '다양한 에이전트 전략은 시스템이 다단계 도구 호출을 계획하고 실행하는 방법을 결정합니다',
         configureTip: '에이전트 전략을 구성하세요.',
         searchPlaceholder: '검색 에이전트 전략',
         shortLabel: '전략',
         selectTip: '에이전트 전략 선택',
-        configureTipDesc: '에이전트 전략을 구성한 후 이 노드는 나머지 구성을 자동으로 로드합니다. 이 전략은 다단계 도구 추론의 메커니즘에 영향을 미칩니다.',
+        configureTipDesc:
+          '에이전트 전략을 구성한 후 이 노드는 나머지 구성을 자동으로 로드합니다. 이 전략은 다단계 도구 추론의 메커니즘에 영향을 미칩니다.',
       },
       pluginInstaller: {
         install: '설치하다',
@@ -796,7 +868,8 @@ const translation = {
       },
       modelNotSupport: {
         title: '지원되지 않는 모델',
-        descForVersionSwitch: '설치된 플러그인 버전은 이 모델을 제공하지 않습니다. 버전을 전환하려면 클릭합니다.',
+        descForVersionSwitch:
+          '설치된 플러그인 버전은 이 모델을 제공하지 않습니다. 버전을 전환하려면 클릭합니다.',
         desc: '설치된 플러그인 버전은 이 모델을 제공하지 않습니다.',
       },
       modelSelectorTooltips: {
@@ -812,6 +885,7 @@ const translation = {
         },
         json: '에이전트 생성 JSON',
         text: '상담원이 생성한 콘텐츠',
+        usage: '모델 사용 정보',
       },
       checkList: {
         strategyNotSelected: '전략이 선택되지 않음',
@@ -823,13 +897,17 @@ const translation = {
         cancel: '취소',
         title: '플러그인 설치',
       },
-      strategyNotFoundDescAndSwitchVersion: '설치된 플러그인 버전은 이 전략을 제공하지 않습니다. 버전을 전환하려면 클릭합니다.',
+      strategyNotFoundDescAndSwitchVersion:
+        '설치된 플러그인 버전은 이 전략을 제공하지 않습니다. 버전을 전환하려면 클릭합니다.',
       learnMore: '더 알아보세요',
       toolNotAuthorizedTooltip: '{{도구}} 권한이 부여되지 않음',
-      strategyNotFoundDesc: '설치된 플러그인 버전은 이 전략을 제공하지 않습니다.',
+      strategyNotFoundDesc:
+        '설치된 플러그인 버전은 이 전략을 제공하지 않습니다.',
       maxIterations: '최대 반복 횟수',
-      pluginNotFoundDesc: '이 플러그인은 GitHub 에서 설치됩니다. 플러그인으로 이동하여 다시 설치하십시오.',
-      pluginNotInstalledDesc: '이 플러그인은 GitHub 에서 설치됩니다. 플러그인으로 이동하여 다시 설치하십시오.',
+      pluginNotFoundDesc:
+        '이 플러그인은 GitHub 에서 설치됩니다. 플러그인으로 이동하여 다시 설치하십시오.',
+      pluginNotInstalledDesc:
+        '이 플러그인은 GitHub 에서 설치됩니다. 플러그인으로 이동하여 다시 설치하십시오.',
       strategyNotInstallTooltip: '{{strategy}}가 설치되지 않았습니다.',
       tools: '도구',
       unsupportedStrategy: '지원되지 않는 전략',
@@ -843,6 +921,8 @@ const translation = {
       modelNotSelected: '모델이 선택되지 않음',
       toolbox: '도구',
       linkToPlugin: '플러그인에 대한 링크',
+      parameterSchema: '파라미터 스키마',
+      clickToViewParameterSchema: '매개변수 스키마 보려면 클릭하세요.',
     },
     loop: {
       ErrorMethod: {
@@ -868,9 +948,11 @@ const translation = {
       loopVariables: '루프 변수',
       setLoopVariables: '루프 범위 내에서 변수를 설정합니다.',
       initialLoopVariables: '초기 루프 변수',
-      breakConditionTip: '종료 조건과 대화 변수가 있는 루프 내에서만 변수를 참조할 수 있습니다.',
+      breakConditionTip:
+        '종료 조건과 대화 변수가 있는 루프 내에서만 변수를 참조할 수 있습니다.',
       currentLoopCount: '현재 루프 카운트: {{count}}',
-      loopMaxCountError: '유효한 최대 루프 수를 입력하십시오. 범위는 1 에서 {{maxCount}}입니다.',
+      loopMaxCountError:
+        '유효한 최대 루프 수를 입력하십시오. 범위는 1 에서 {{maxCount}}입니다.',
       totalLoopCount: '총 루프 횟수: {{count}}',
       variableName: '변수 이름',
       loopNode: '루프 노드',
@@ -885,7 +967,8 @@ const translation = {
     conversationVars: '대화 변수',
     noVarsForOperation: '선택한 작업에 할당할 수 있는 변수가 없습니다.',
     noAssignedVars: '사용 가능한 할당된 변수가 없습니다.',
-    assignedVarsDescription: '할당된 변수는 다음과 같이 쓰기 가능한 변수여야 합니다.',
+    assignedVarsDescription:
+      '할당된 변수는 다음과 같이 쓰기 가능한 변수여야 합니다.',
   },
   versionHistory: {
     filter: {
@@ -899,7 +982,8 @@ const translation = {
       titleLengthLimit: '제목은 {{limit}}자를 초과할 수 없습니다.',
       title: '제목',
       releaseNotes: '릴리스 노트',
-      releaseNotesLengthLimit: '릴리스 노트는 {{limit}}자를 초과할 수 없습니다.',
+      releaseNotesLengthLimit:
+        '릴리스 노트는 {{limit}}자를 초과할 수 없습니다.',
     },
     action: {
       updateFailure: '버전 업데이트에 실패했습니다.',
@@ -908,16 +992,18 @@ const translation = {
       restoreFailure: '버전을 복원하지 못했습니다.',
       deleteFailure: '버전을 삭제하지 못했습니다.',
       updateSuccess: '버전이 업데이트되었습니다.',
+      copyIdSuccess: '클립보드에 복사된 ID',
     },
     editVersionInfo: '버전 정보 편집',
     latest: '최신',
     currentDraft: '현재 초안',
     releaseNotesPlaceholder: '변경된 내용을 설명하세요.',
     defaultName: '제목 없는 버전',
-    nameThisVersion: '이 버전의 이름을 지어주세요',
-    title: '버전들',
+    nameThisVersion: '이름 바꾸기',
+    title: '버전 기록',
     deletionTip: '삭제는 되돌릴 수 없으니, 확인해 주시기 바랍니다.',
     restorationTip: '버전 복원 후 현재 초안이 덮어쓰여질 것입니다.',
+    copyId: 'ID 복사',
   },
   debug: {
     noData: {
@@ -943,10 +1029,25 @@ const translation = {
       clearNode: '캐시된 변수를 지우기',
       resetConversationVar: '대화 변수를 기본 값으로 재설정합니다.',
       reset: '마지막 실행 값으로 재설정',
-      emptyTip: '캔버스에서 노드를 한 단계씩 실행한 후, 변수 검사에서 노드 변수의 현재 값을 볼 수 있습니다.',
+      emptyTip:
+        '캔버스에서 노드를 한 단계씩 실행한 후, 변수 검사에서 노드 변수의 현재 값을 볼 수 있습니다.',
     },
     settingsTab: '설정',
     lastRunTab: '마지막 실행',
+    relations: {
+      dependencies: '종속성',
+      dependentsDescription: '이 노드에 의존하는 노드',
+      noDependents: '부양가족 없음',
+      noDependencies: '종속성 없음',
+      dependents: '부양 가족',
+      dependenciesDescription: '이 노드가 의존하는 노드',
+    },
+    relationsTab: '관계',
+    copyLastRun: '마지막 실행 복사',
+    noLastRunFound: '이전 실행이 없습니다.',
+    noMatchingInputsFound: '지난 실행에서 일치하는 입력을 찾을 수 없습니다.',
+    copyLastRunError: '마지막 실행 입력을 복사하는 데 실패했습니다.',
+    lastOutput: '마지막 출력',
   },
 }
 

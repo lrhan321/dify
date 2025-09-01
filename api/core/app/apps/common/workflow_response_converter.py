@@ -3,7 +3,6 @@ from collections.abc import Mapping, Sequence
 from datetime import UTC, datetime
 from typing import Any, Optional, Union, cast
 
-from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from core.app.entities.app_invoke_entities import AdvancedChatAppGenerateEntity, WorkflowAppGenerateEntity
@@ -44,16 +43,16 @@ from core.app.entities.task_entities import (
 )
 from core.file import FILE_MODEL_IDENTITY, File
 from core.tools.tool_manager import ToolManager
+from core.variables.segments import ArrayFileSegment, FileSegment, Segment
 from core.workflow.entities.workflow_execution import WorkflowExecution
 from core.workflow.entities.workflow_node_execution import WorkflowNodeExecution, WorkflowNodeExecutionStatus
 from core.workflow.nodes import NodeType
 from core.workflow.nodes.tool.entities import ToolNodeData
 from core.workflow.workflow_type_encoder import WorkflowRuntimeTypeConverter
+from libs.datetime_utils import naive_utc_now
 from models import (
     Account,
-    CreatorUserRole,
     EndUser,
-    WorkflowRun,
 )
 
 
@@ -62,8 +61,10 @@ class WorkflowResponseConverter:
         self,
         *,
         application_generate_entity: Union[AdvancedChatAppGenerateEntity, WorkflowAppGenerateEntity],
+        user: Union[Account, EndUser],
     ) -> None:
         self._application_generate_entity = application_generate_entity
+        self._user = user
 
     def workflow_start_to_stream_response(
         self,
@@ -90,27 +91,21 @@ class WorkflowResponseConverter:
         workflow_execution: WorkflowExecution,
     ) -> WorkflowFinishStreamResponse:
         created_by = None
-        workflow_run = session.scalar(select(WorkflowRun).where(WorkflowRun.id == workflow_execution.id_))
-        assert workflow_run is not None
-        if workflow_run.created_by_role == CreatorUserRole.ACCOUNT:
-            stmt = select(Account).where(Account.id == workflow_run.created_by)
-            account = session.scalar(stmt)
-            if account:
-                created_by = {
-                    "id": account.id,
-                    "name": account.name,
-                    "email": account.email,
-                }
-        elif workflow_run.created_by_role == CreatorUserRole.END_USER:
-            stmt = select(EndUser).where(EndUser.id == workflow_run.created_by)
-            end_user = session.scalar(stmt)
-            if end_user:
-                created_by = {
-                    "id": end_user.id,
-                    "user": end_user.session_id,
-                }
+
+        user = self._user
+        if isinstance(user, Account):
+            created_by = {
+                "id": user.id,
+                "name": user.name,
+                "email": user.email,
+            }
+        elif isinstance(user, EndUser):
+            created_by = {
+                "id": user.id,
+                "user": user.session_id,
+            }
         else:
-            raise NotImplementedError(f"unknown created_by_role: {workflow_run.created_by_role}")
+            raise NotImplementedError(f"User type not supported: {type(user)}")
 
         # Handle the case where finished_at is None by using current time as default
         finished_at_timestamp = (
@@ -398,7 +393,7 @@ class WorkflowResponseConverter:
                 if event.error is None
                 else WorkflowNodeExecutionStatus.FAILED,
                 error=None,
-                elapsed_time=(datetime.now(UTC).replace(tzinfo=None) - event.start_at).total_seconds(),
+                elapsed_time=(naive_utc_now() - event.start_at).total_seconds(),
                 total_tokens=event.metadata.get("total_tokens", 0) if event.metadata else 0,
                 execution_metadata=event.metadata,
                 finished_at=int(time.time()),
@@ -477,7 +472,7 @@ class WorkflowResponseConverter:
                 if event.error is None
                 else WorkflowNodeExecutionStatus.FAILED,
                 error=None,
-                elapsed_time=(datetime.now(UTC).replace(tzinfo=None) - event.start_at).total_seconds(),
+                elapsed_time=(naive_utc_now() - event.start_at).total_seconds(),
                 total_tokens=event.metadata.get("total_tokens", 0) if event.metadata else 0,
                 execution_metadata=event.metadata,
                 finished_at=int(time.time()),
@@ -506,7 +501,8 @@ class WorkflowResponseConverter:
         # Convert to tuple to match Sequence type
         return tuple(flattened_files)
 
-    def _fetch_files_from_variable_value(self, value: Union[dict, list]) -> Sequence[Mapping[str, Any]]:
+    @classmethod
+    def _fetch_files_from_variable_value(cls, value: Union[dict, list, Segment]) -> Sequence[Mapping[str, Any]]:
         """
         Fetch files from variable value
         :param value: variable value
@@ -515,20 +511,30 @@ class WorkflowResponseConverter:
         if not value:
             return []
 
-        files = []
-        if isinstance(value, list):
+        files: list[Mapping[str, Any]] = []
+        if isinstance(value, FileSegment):
+            files.append(value.value.to_dict())
+        elif isinstance(value, ArrayFileSegment):
+            files.extend([i.to_dict() for i in value.value])
+        elif isinstance(value, File):
+            files.append(value.to_dict())
+        elif isinstance(value, list):
             for item in value:
-                file = self._get_file_var_from_value(item)
+                file = cls._get_file_var_from_value(item)
                 if file:
                     files.append(file)
-        elif isinstance(value, dict):
-            file = self._get_file_var_from_value(value)
+        elif isinstance(
+            value,
+            dict,
+        ):
+            file = cls._get_file_var_from_value(value)
             if file:
                 files.append(file)
 
         return files
 
-    def _get_file_var_from_value(self, value: Union[dict, list]) -> Mapping[str, Any] | None:
+    @classmethod
+    def _get_file_var_from_value(cls, value: Union[dict, list]) -> Mapping[str, Any] | None:
         """
         Get file var from value
         :param value: variable value
